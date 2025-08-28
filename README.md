@@ -37,6 +37,33 @@ Based on peer-reviewed bioavailability research:
 - **Strain discovery** - Find strains by desired effects
 - **Visual strain guide** - Premium Leafly images for top strains
 
+## 🤖 Add CannaBot to Your Discord Server
+
+### 🎯 **One-Click Setup**
+**[➤ Add CannaBot to Discord](https://discord.com/oauth2/authorize?client_id=1408583217895964692)**
+
+✅ **Pre-configured permissions** - Ready to use immediately  
+✅ **Slash commands enabled** - Modern Discord interface  
+✅ **Private & secure** - Your data stays in your server  
+
+### 🚀 **Getting Started**
+1. **Click the link above** to add CannaBot to your server
+2. **Select your Discord server** from the dropdown
+3. **Click "Authorize"** to complete the setup
+4. **Type `/help`** in any channel to see all commands
+5. **Start tracking** with `/use` or explore strains with `/strains`
+
+### 💡 **First Commands to Try**
+- **`/help`** - Complete command guide with examples
+- **`/strains random`** - Discover a random cannabis strain
+- **`/strains search Blue Dream`** - Look up specific strains
+- **`/use method:vape amount:0.5 strain:Blue Dream`** - Log consumption
+
+### 🔒 **Privacy & Security**
+- **No personal data collected** - Everything stays in your Discord server
+- **Open source** - Fully transparent code on GitHub
+- **Self-hostable** - Run your own instance if preferred
+
 ## 🚀 Future Roadmap
 
 ### 🌿 **Strain Database Expansion** (2025-2026)
@@ -89,8 +116,8 @@ Based on peer-reviewed bioavailability research:
 
 #### 🐳 **Docker (Recommended)**
 ```bash
-git clone https://github.com/yourusername/CannaBot.git
-cd CannaBot
+git clone https://github.com/canna-dev/cannabot.git
+cd cannabot
 cp .env.docker .env
 # Edit .env with your Discord token
 ./docker-start.sh  # Linux/Mac
@@ -102,8 +129,8 @@ docker-start.bat   # Windows
 
 1. **Clone and setup**
    ```bash
-   git clone https://github.com/yourusername/CannaBot.git
-   cd CannaBot
+   git clone https://github.com/canna-dev/cannabot.git
+   cd cannabot
    pip install -r requirements.txt
    ```
 
