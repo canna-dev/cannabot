@@ -1,0 +1,30 @@
+# Development Docker Compose Override
+version: '3.8'
+
+services:
+  cannabot:
+    build:
+      target: base
+    environment:
+      - DEBUG=true
+      - LOG_LEVEL=DEBUG
+    volumes:
+      # Mount source code for development
+      - .:/app
+      - /app/__pycache__
+      - /app/.venv
+    stdin_open: true
+    tty: true
+    command: python run_bot.py
+    
+  # Optional development tools
+  adminer:
+    image: adminer
+    container_name: cannabot-adminer
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    networks:
+      - cannabot-network
+    depends_on:
+      - postgres

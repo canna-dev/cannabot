@@ -1,0 +1,83 @@
+# CannaBot Docker Compose Configuration
+
+services:
+  cannabot:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: cannabot
+    restart: unless-stopped
+    environment:
+      # Discord Configuration (Required)
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
+      
+      # Optional Configuration
+      - DEBUG=${DEBUG:-false}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - DISCORD_GUILD_ID=${DISCORD_GUILD_ID:-}
+      
+      # Database Configuration
+      - DATABASE_URL=${DATABASE_URL:-postgresql://cannabot:cannabot_password_2025@postgres:5432/cannabot}
+      
+      # Feature Flags
+      - ENABLE_SHARING=${ENABLE_SHARING:-true}
+      - ENABLE_LEADERBOARDS=${ENABLE_LEADERBOARDS:-true}
+      - MAX_DAILY_THC_DEFAULT=${MAX_DAILY_THC_DEFAULT:-100}
+    volumes:
+      # Persist database and logs
+      - ./data:/app/data
+      - ./logs:/app/logs
+    networks:
+      - cannabot-network
+    depends_on:
+      - postgres
+    healthcheck:
+      test: ["CMD", "python", "-c", "from bot.config import Config; print('OK')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional PostgreSQL Database (for production)
+  postgres:
+    image: postgres:15-alpine
+    container_name: cannabot-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-cannabot}
+      POSTGRES_USER: ${POSTGRES_USER:-cannabot}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-cannabot_password_2025}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - cannabot-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-cannabot}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Optional Redis for caching (advanced usage)
+  redis:
+    image: redis:7-alpine
+    container_name: cannabot-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
+      - cannabot-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  cannabot-network:
+    driver: bridge
